@@ -11,7 +11,11 @@ canvas.height = window.innerHeight - 8;
 canvas.width = window.innerWidth - 8;
 
 function draw() {
-    context.fillStyle = 'black';
+    const gr = context.createLinearGradient(0, canvas.height / 2, canvas.width, canvas.height / 2);
+    gr.addColorStop(.2, '#00030c');
+    gr.addColorStop(.4, '#000311');
+    gr.addColorStop(.8, '#00020e');
+    context.fillStyle = gr;
     context.fillRect(0, 0, canvas.width, canvas.height);
 }
 
@@ -86,12 +90,12 @@ function runGame() {
     }
 
     function breakpointAdder(headSnake, direction) {
-        if (
-            headSnake.x <= 0 ||
-            headSnake.y <= 0 ||
-            headSnake.x >= canvas.width ||
-            headSnake.y >= canvas.height
-        ) return;
+        // if (
+        //     headSnake.x <= 0 ||
+        //     headSnake.y <= 0 ||
+        //     headSnake.x >= canvas.width ||
+        //     headSnake.y >= canvas.height
+        // ) return;
 
         snakeParts.forEach(snakePart => {
             snakePart.breakpoints.push({
@@ -180,14 +184,6 @@ function runGame() {
             context.closePath();
         });
 
-        snakeParts.forEach(snakePart => {
-            // check for edges
-            if (snakePart.x >= canvas.width) snakePart.x = Math.abs(canvas.width - snakePart.x) + 1;
-            else if (snakePart.x <= 0) snakePart.x += canvas.width + 1;
-            else if (snakePart.y >= canvas.height) snakePart.y = Math.abs(canvas.height - snakePart.y) + 1;
-            else if (snakePart.y <= 0) snakePart.y += canvas.height + 1;
-        });
-
         // we check to see if there is any food near the head of the snake
         const headPart = snakeParts[snakeParts.length - 1];
         foods.forEach(food => {
@@ -274,6 +270,7 @@ function runGame() {
             });
         });
 
+        // calculation for the next render
         snakeParts.forEach(snakePart => {
             if (snakePart.breakpoints.length) {
                 const currentBreakpoint = snakePart.breakpoints[0];
@@ -290,9 +287,23 @@ function runGame() {
             else if (snakePart.direction.next === 'left') snakePart.x -= snakePart.speed;
 
             snakePart.direction.current = snakePart.direction.next;
+        });
 
+        snakeParts.forEach(snakePart => {
+            // check for edges
+            if (snakePart.x >= canvas.width) snakePart.x = Math.abs(canvas.width - snakePart.x) + 1;
+            else if (snakePart.x <= 0) snakePart.x += canvas.width + 1;
+            else if (snakePart.y >= canvas.height) snakePart.y = Math.abs(canvas.height - snakePart.y) + 1;
+            else if (snakePart.y <= 0) snakePart.y += canvas.height + 1;
+        });
+
+        // render
+        snakeParts.forEach(snakePart => {
             context.fillStyle = snakePart.color;
-            context.fillRect(snakePart.x, snakePart.y, snakePart.width, snakePart.height);
+            context.beginPath();
+            // context.fillRect(snakePart.x, snakePart.y, snakePart.width, snakePart.height);
+            context.arc(snakePart.x, snakePart.y, snakePart.width, 0, Math.PI * 2);
+            context.fill();
             context.closePath();
         });
 
