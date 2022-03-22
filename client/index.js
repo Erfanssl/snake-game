@@ -111,11 +111,7 @@ function runGame() {
         if (
             !(objOne.x + objOne.width < objTwo.x || objOne.x > objTwo.x + objTwo.width) &&
             !(objOne.y + objOne.height < objTwo.y || objOne.y > objTwo.y + objTwo.height)
-        ) {
-            console.log('OBJ 1', objOne);
-            console.log('OBJ 2', objTwo);
-            return true;
-        }
+        ) return true;
 
         return false;
     }
@@ -141,8 +137,6 @@ function runGame() {
 
     window.addEventListener('keydown', (event) => {
         const headSnake = snakeParts[snakeParts.length - 1];
-
-        console.log('keyboardInterval', keyboardInterval);
 
         if (!keyboardInterval) return;
 
