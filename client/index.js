@@ -179,7 +179,7 @@ function runGame() {
         foods.forEach(food => {
             context.fillStyle = food.color;
             context.beginPath();
-            context.arc(food.x, food.y, food.width, 0, Math.PI * 2);
+            context.arc(food.x, food.y, food.width * 1.15, 0, Math.PI * 2);
             context.fill();
             context.closePath();
         });
